@@ -51,10 +51,10 @@ class DataManager:
   RAW_SENSOR_VALUES = ['ACC', 'ECG','BVP']
   
   FEATURES = {'a_mean': [], 'a_std': [], 'a_maxx': [], 'a_maxy': [], 'a_maxz': [],\
-              'e_max': [],  'e_min': [], 'e_mean': [], 'e_range': [], 'e_std': [],\
+              't_max': [],  't_min': [], 't_mean': [], 't_range': [], 't_std': [],\
               'b_max': [],  'b_min': [], 'b_mean': [], 'b_range': [], 'b_std': [] }
   STRESS_FEATURES = {'a_mean': [], 'a_std': [], 'a_maxx': [], 'a_maxy': [], 'a_maxz': [],\
-              'e_max': [],  'e_min': [], 'e_mean': [], 'e_range': [], 'e_std': [],\
+              't_max': [],  't_min': [], 't_mean': [], 't_range': [], 't_std': [],\
               'b_max': [],  'b_min': [], 'b_mean': [], 'b_range': [], 'b_std': [] }
 
   # Dictionaries to store the two sets of data
@@ -254,10 +254,10 @@ class DataManager:
           DataManager.FEATURES[keys[key_index]].extend(acc[feature])
           key_index = key_index + 1
       
-      ecg = self.get_stats(data[index]['ECG'], window_size, window_shift)
+      temp = self.get_stats(data[index]['TEMP'], window_size, window_shift)
       for feature in DataManager.FEATURE_KEYS:
         #print('computed ', len(eda[feature]), 'windows for eda ', feature)
-        DataManager.FEATURES[keys[key_index]].extend(ecg[feature])
+        DataManager.FEATURES[keys[key_index]].extend(temp[feature])
         key_index = key_index + 1
 
       bvp = self.get_stats(data[index]['BVP'], window_size, window_shift)
@@ -282,10 +282,10 @@ class DataManager:
         DataManager.STRESS_FEATURES[keys[key_index]].extend(acc[feature])
         key_index = key_index + 1
       
-      ecg = self.get_stats(data[index]['ECG'], window_size, window_shift)
+      temp = self.get_stats(data[index]['TEMP'], window_size, window_shift)
       for feature in DataManager.FEATURE_KEYS:
         #print('computed ', len(eda[feature]), 'windows for eda ', feature)
-        DataManager.STRESS_FEATURES[keys[key_index]].extend(ecg[feature])
+        DataManager.STRESS_FEATURES[keys[key_index]].extend(temp[feature])
         key_index = key_index + 1
 
       bvp = self.get_stats(data[index]['BVP'], window_size, window_shift)
@@ -301,9 +301,9 @@ class DataManager:
     for i in range(0, len(DataManager.FEATURES['a_mean'])):
       X1.append([DataManager.FEATURES['a_mean'][i], DataManager.FEATURES['a_std'][i],\
                  DataManager.FEATURES['a_maxx'][i], DataManager.FEATURES['a_maxy'][i],\
-                 DataManager.FEATURES['a_maxz'][i], DataManager.FEATURES['e_max'][i],\
-                 DataManager.FEATURES['e_min'][i],  DataManager.FEATURES['e_mean'][i],\
-                 DataManager.FEATURES['e_range'][i],DataManager.FEATURES['e_std'][i],\
+                 DataManager.FEATURES['a_maxz'][i], DataManager.FEATURES['t_max'][i],\
+                 DataManager.FEATURES['t_min'][i],  DataManager.FEATURES['t_mean'][i],\
+                 DataManager.FEATURES['t_range'][i],DataManager.FEATURES['t_std'][i],\
                  DataManager.FEATURES['b_max'][i],  DataManager.FEATURES['b_min'][i],\
                  DataManager.FEATURES['b_mean'][i], DataManager.FEATURES['b_range'][i],\
                  DataManager.FEATURES['b_std'][i]])
@@ -312,9 +312,9 @@ class DataManager:
     for i in range(0,  len(DataManager.STRESS_FEATURES['a_mean'])):
       X2.append([DataManager.STRESS_FEATURES['a_mean'][i], DataManager.STRESS_FEATURES['a_std'][i],\
                  DataManager.STRESS_FEATURES['a_maxx'][i], DataManager.STRESS_FEATURES['a_maxy'][i],\
-                 DataManager.STRESS_FEATURES['a_maxz'][i], DataManager.STRESS_FEATURES['e_max'][i],\
-                 DataManager.STRESS_FEATURES['e_min'][i], DataManager.STRESS_FEATURES['e_mean'][i],\
-                 DataManager.STRESS_FEATURES['e_range'][i], DataManager.STRESS_FEATURES['e_std'][i],\
+                 DataManager.STRESS_FEATURES['a_maxz'][i], DataManager.STRESS_FEATURES['t_max'][i],\
+                 DataManager.STRESS_FEATURES['t_min'][i], DataManager.STRESS_FEATURES['t_mean'][i],\
+                 DataManager.STRESS_FEATURES['t_range'][i], DataManager.STRESS_FEATURES['t_std'][i],\
                  DataManager.STRESS_FEATURES['b_max'][i], DataManager.STRESS_FEATURES['b_min'][i],\
                  DataManager.STRESS_FEATURES['b_mean'][i], DataManager.STRESS_FEATURES['b_range'][i],\
                  DataManager.STRESS_FEATURES['b_std'][i]])
