@@ -48,7 +48,7 @@ class DataManager:
     # Keys for measurements collected by the RespiBAN on the chest
     # minus the ones we don't want
     # RAW_SENSOR_VALUES = ['ACC','ECG','EDA','EMG','Resp','Temp']
-    RAW_SENSOR_VALUES = ['ACC', 'EDA','Temp']
+    RAW_SENSOR_VALUES = ['ACC', 'Resp','Temp']
     
     FEATURES = {'a_mean': [], 'a_std': [], 'a_maxx': [], 'a_maxy': [], 'a_maxz': [],\
                 'e_max': [],  'e_min': [], 'e_mean': [], 'e_range': [], 'e_std': [], \
@@ -131,8 +131,8 @@ class DataManager:
                {'EDA': [###, ..], ..} }
         """
                 
-        # if self.ignore_empatica:
-        #     del data['signal']['chest']
+        if self.ignore_empatica:
+            del data['signal']['wrist']
         
         baseline_indices = np.nonzero(data['label']==DataManager.BASELINE)[0]   
         stress_indices = np.nonzero(data['label']==DataManager.STRESS)[0]
@@ -140,8 +140,8 @@ class DataManager:
         stress = dict()
         
         for value in DataManager.RAW_SENSOR_VALUES: 
-            base[value] = data['signal']['wrist'][value][baseline_indices]
-            stress[value] = data['signal']['wrist'][value][stress_indices]
+            base[value] = data['signal']['chest'][value][baseline_indices]
+            stress[value] = data['signal']['chest'][value][stress_indices]
         
         DataManager.BASELINE_DATA.append(base)
         DataManager.STRESS_DATA.append(stress)
@@ -262,10 +262,10 @@ class DataManager:
                 DataManager.FEATURES[keys[key_index]].extend(acc[feature])
                 key_index = key_index + 1
             
-            eda = self.get_stats(data[index]['EDA'], window_size, window_shift)
+            resp = self.get_stats(data[index]['Resp'], window_size, window_shift)
             for feature in DataManager.FEATURE_KEYS:
                 #print('computed ', len(eda[feature]), 'windows for eda ', feature)
-                DataManager.FEATURES[keys[key_index]].extend(eda[feature])
+                DataManager.FEATURES[keys[key_index]].extend(resp[feature])
                 key_index = key_index + 1
 
             temp = self.get_stats(data[index]['Temp'], window_size, window_shift)
@@ -290,10 +290,10 @@ class DataManager:
                 DataManager.STRESS_FEATURES[keys[key_index]].extend(acc[feature])
                 key_index = key_index + 1
             
-            eda = self.get_stats(data[index]['EDA'], window_size, window_shift)
+            resp = self.get_stats(data[index]['Resp'], window_size, window_shift)
             for feature in DataManager.FEATURE_KEYS:
                 #print('computed ', len(eda[feature]), 'windows for eda ', feature)
-                DataManager.STRESS_FEATURES[keys[key_index]].extend(eda[feature])
+                DataManager.STRESS_FEATURES[keys[key_index]].extend(resp[feature])
                 key_index = key_index + 1
 
             temp = self.get_stats(data[index]['Temp'], window_size, window_shift)
